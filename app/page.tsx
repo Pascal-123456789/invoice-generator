@@ -3,8 +3,29 @@
 import { generatePDF } from './utils/generatePDF';
 import { useState, useEffect } from 'react';
 
+interface InvoiceItem {
+  description: string;
+  quantity: number;
+  rate: number;
+}
+
+interface InvoiceData {
+  fromName: string;
+  fromEmail: string;
+  fromAddress: string;
+  toName: string;
+  toEmail: string;
+  toAddress: string;
+  invoiceNumber: string;
+  invoiceDate: string;
+  dueDate: string;
+  items: InvoiceItem[];
+  tax: number;
+  notes: string;
+}
+
 export default function Home() {
-  const [invoiceData, setInvoiceData] = useState({
+  const [invoiceData, setInvoiceData] = useState<InvoiceData>({
     // Your business info
     fromName: '',
     fromEmail: '',
@@ -65,13 +86,13 @@ export default function Home() {
     });
   };
 
-  const updateItem = (index, field, value) => {
+  const updateItem = (index: number, field: keyof InvoiceItem, value: string | number) => {
     const newItems = [...invoiceData.items];
-    newItems[index][field] = value;
+    newItems[index] = { ...newItems[index], [field]: value };
     setInvoiceData({ ...invoiceData, items: newItems });
   };
 
-  const removeItem = (index) => {
+  const removeItem = (index: number) => {
     const newItems = invoiceData.items.filter((_, i) => i !== index);
     setInvoiceData({ ...invoiceData, items: newItems });
   };
