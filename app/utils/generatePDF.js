@@ -132,32 +132,13 @@ export function generatePDF(invoiceData, isPremium = false) {
     doc.text(notesLines, 20, finalY + 31);
   }
   
-    // Watermark (only if not premium)
-      if (!isPremium) {
-        const pageHeight = doc.internal.pageSize.height;
-        const pageWidth = doc.internal.pageSize.width;
-        
-        // Large diagonal watermark across the page
-        doc.setFontSize(50);
-        doc.setTextColor(220, 220, 220); // Very light gray
-        doc.saveGraphicsState();
-        doc.setGState(new doc.GState({ opacity: 0.3 }));
-        
-        // Rotate and place diagonal watermark
-        const centerX = pageWidth / 2;
-        const centerY = pageHeight / 2;
-        doc.text('INVOICEGEN.COM', centerX, centerY, {
-          align: 'center',
-          angle: 45
-        });
-        
-        doc.restoreGraphicsState();
-        
-        // Small footer text
-        doc.setFontSize(8);
-        doc.setTextColor(150, 150, 150);
-        doc.text('Remove watermark at InvoiceGen.com for $5', 105, pageHeight - 10, { align: 'center' });
-      }
+  // Watermark (only if not premium)
+  if (!isPremium) {
+    const pageHeight = doc.internal.pageSize.height;
+    doc.setFontSize(8);
+    doc.setTextColor(200, 200, 200);
+    doc.text('Created with InvoiceGen', 105, pageHeight - 10, { align: 'center' });
+  }
   
   // Download
   const fileName = `Invoice_${invoiceData.invoiceNumber || '001'}_${invoiceData.toName?.replace(/\s+/g, '_') || 'Client'}.pdf`;

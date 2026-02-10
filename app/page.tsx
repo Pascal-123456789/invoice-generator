@@ -66,19 +66,40 @@ export default function Home() {
     }
   };
 
-  const handleUnlock = () => {
-    // Simple unlock codes (we'll replace with Stripe later)
-    const validCodes = ['PREMIUM2026', 'PAID001', 'UNLOCK123'];
-    if (validCodes.includes(unlockCode.toUpperCase())) {
-      localStorage.setItem('invoiceGenPremium', unlockCode.toUpperCase());
-      setIsPremium(true);
-      alert('Success! Watermark removed.');
-      setUnlockCode('');
-    } else {
-      alert('Invalid code. Please try again.');
-    }
-  };
+    const handleUnlock = () => {
+      // Simple unlock codes (we'll replace with Stripe later)
+      const validCodes = ['PREMIUM2026', 'PAID001', 'UNLOCK123'];
+      
+      const upperCode = unlockCode.toUpperCase();
+      
+      // Check if it's a manual code OR a Stripe-generated code (starts with PAID-)
+      if (validCodes.includes(upperCode) || upperCode.startsWith('PAID-')) {
+        localStorage.setItem('invoiceGenPremium', upperCode);
+        setIsPremium(true);
+        alert('Success! Watermark removed.');
+        setUnlockCode('');
+      } else {
+        alert('Invalid code. Please try again.');
+      }
+    };
 
+    const handleStripePayment = async () => {
+      try {
+        const response = await fetch('/api/create-checkout', {
+          method: 'POST',
+        });
+
+        const { url } = await response.json();
+        
+        if (url) {
+          window.location.href = url;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again.');
+      }
+    };
+    
   const addItem = () => {
     setInvoiceData({
       ...invoiceData,
@@ -396,7 +417,7 @@ export default function Home() {
                   </button>
                 </div>
                 <p className="text-xs text-gray-500 mt-2">
-                  Or <a href="#" className="text-blue-600 hover:underline">pay with Stripe →</a>
+                  Or <button onClick={handleStripePayment} className="text-blue-600 hover:underline">pay with Stripe →</button>
                 </p>
               </div>
             )}
