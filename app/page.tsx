@@ -66,40 +66,38 @@ export default function Home() {
     }
   };
 
-    const handleUnlock = () => {
-      // Simple unlock codes (we'll replace with Stripe later)
-      const validCodes = ['PREMIUM2026', 'PAID001', 'UNLOCK123'];
-      
-      const upperCode = unlockCode.toUpperCase();
-      
-      // Check if it's a manual code OR a Stripe-generated code (starts with PAID-)
-      if (validCodes.includes(upperCode) || upperCode.startsWith('PAID-')) {
-        localStorage.setItem('invoiceGenPremium', upperCode);
-        setIsPremium(true);
-        alert('Success! Watermark removed.');
-        setUnlockCode('');
-      } else {
-        alert('Invalid code. Please try again.');
-      }
-    };
-
-    const handleStripePayment = async () => {
-      try {
-        const response = await fetch('/api/create-checkout', {
-          method: 'POST',
-        });
-
-        const { url } = await response.json();
-        
-        if (url) {
-          window.location.href = url;
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('Something went wrong. Please try again.');
-      }
-    };
+  const handleUnlock = () => {
+    const validCodes = ['PREMIUM2026', 'PAID001', 'UNLOCK123'];
     
+    const upperCode = unlockCode.toUpperCase();
+    
+    if (validCodes.includes(upperCode) || upperCode.startsWith('PAID-')) {
+      localStorage.setItem('invoiceGenPremium', upperCode);
+      setIsPremium(true);
+      alert('Success! Watermark removed.');
+      setUnlockCode('');
+    } else {
+      alert('Invalid code. Please try again.');
+    }
+  };
+
+  const handleStripePayment = async () => {
+    try {
+      const response = await fetch('/api/create-checkout', {
+        method: 'POST',
+      });
+
+      const { url } = await response.json();
+      
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Something went wrong. Please try again.');
+    }
+  };
+
   const addItem = () => {
     setInvoiceData({
       ...invoiceData,
@@ -129,15 +127,41 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-2 text-gray-900">
-          Invoice Generator
-        </h1>
-        <p className="text-center text-gray-600 mb-12">
-          Create beautiful invoices in seconds
-        </p>
-        
+    <main className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-b from-blue-50 to-gray-50 border-b border-gray-200">
+        <div className="max-w-5xl mx-auto px-4 py-16 text-center">
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+            Create Professional Invoices in Seconds
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            Free • No signup • No email required
+          </p>
+          
+          {/* Value Props */}
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-700">
+            <div className="flex items-center gap-2">
+              <span className="text-green-600 text-lg">✓</span>
+              <span>No account required</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-green-600 text-lg">✓</span>
+              <span>Works in your browser</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-green-600 text-lg">✓</span>
+              <span>Your data stays private</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-green-600 text-lg">✓</span>
+              <span>Professional PDFs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-5xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Form Section */}
           <div className="bg-white rounded-lg shadow-lg p-8">
