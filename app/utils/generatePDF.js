@@ -146,7 +146,7 @@ export function generatePDF(invoiceData, isPremium = false) {
         // Rotate and place diagonal watermark
         const centerX = pageWidth / 2;
         const centerY = pageHeight / 2;
-        doc.text('PREMIUM INVOICE', centerX, centerY, {
+        doc.text('FREE INVOICE', centerX, centerY, {
           align: 'center',
           angle: 45
         });
@@ -156,7 +156,7 @@ export function generatePDF(invoiceData, isPremium = false) {
         // Small footer text
         doc.setFontSize(8);
         doc.setTextColor(150, 150, 150);
-        doc.text('Remove watermark at https://invoice-generator-blond-iota.vercel.app for $5', 105, pageHeight - 10, { align: 'center' });
+        doc.text('Remove watermark at https://freeinvoice-gen.vercel.app/ for $5', 105, pageHeight - 10, { align: 'center' });
       }
   
   // Download
